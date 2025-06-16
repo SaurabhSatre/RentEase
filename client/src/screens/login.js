@@ -69,7 +69,7 @@ const Login = () => {
 
       const userData = { email, password };
 
-      const res = await fetch(`http://localhost:4000/api/auth/user/login`, {
+      const res = await fetch(`https://renteasebackend.saurabhsatre.info/api/auth/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ const Login = () => {
               textDecoration: "underline",
             }}
           >
-            Forgot Password?
+            
           </Typography>
           <Typography
             variant="body2"

@@ -18,11 +18,11 @@ const PORT = process.env.PORT || 8000;
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:8000", "http://localhost:3000"],
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
   })
 );
+
 
 // Parsing Middlewares
 app.use(bodyParser.json());

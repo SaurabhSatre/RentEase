@@ -88,7 +88,7 @@ const SignUpPage = () => {
 
       //console.log("This is user URL : " , `${process.env.REACT_APP_BACKENDURL}/api/v1/user/signup`);
 
-      const res = await fetch(`http://localhost:4000/api/auth/user/register`, {
+      const res = await fetch(`https://renteasebackend.saurabhsatre.info/api/auth/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
