@@ -28,7 +28,7 @@ const ListingPage = () => {
   const [editingProductId, setEditingProductId] = useState(null);
   const [message, setMessage] = useState('');
 
-  const API_BASE = 'http://localhost:4000/api/properties';
+  const API_BASE = 'https://renteasebackend.saurabhsatre.info/api/properties';
 
   const fetchProducts = async () => {
     try {
