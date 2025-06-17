@@ -33,13 +33,16 @@ const addProperty = async (req, res) => {
       return res.status(400).json({ message: 'Rent must be a positive number.' });
     }
 
+    // console.log("This is id , " , req.savedImage._id);
+
     const newProperty = new Property({
       title: title.trim(),
       city: city.trim(),
       rent: parsedRent,
       type: type.trim(),
       description: description.trim(),
-      email
+      email,
+      imageID : req.savedImage._id
     });
 
     const savedProperty = await newProperty.save();
@@ -47,7 +50,7 @@ const addProperty = async (req, res) => {
 
   } catch (error) {
     console.error('Add property error:', error);
-    res.status(500).json({ message: 'Server error adding property. Please try again later.' });
+    res.status(500).json({ message: `Server error adding property. Please try again later. ${error}` });
   }
 };
 

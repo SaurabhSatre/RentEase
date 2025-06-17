@@ -9,6 +9,7 @@ import globalErrorHandler from "./src/controllers/error.controllers.js";
 import connectDB from "./src/db/index.js";
 import userRoutes from "./src/routes/user.routes.js"; // Adjusted path if file is inside src
 import productRoutes from "./src/routes/product.routes.js";
+import imageRoutes from "./src/routes/image.routes.js";
 
 dotenv.config({ path: "./.env" }); // Make sure path is correct relative to this file
 
@@ -54,6 +55,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", userRoutes);
 app.use("/api", productRoutes);
+app.use("/api" , imageRoutes);
 
 
 app.use(globalErrorHandler);

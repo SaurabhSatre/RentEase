@@ -17,6 +17,7 @@ const propertySchema = new mongoose.Schema({
       'Please enter a valid email address',
     ],
   },
+  imageID : { type: String, required: true, trim: true }
 }, {
   timestamps: true
 });

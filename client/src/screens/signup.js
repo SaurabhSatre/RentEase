@@ -16,6 +16,7 @@ import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../helper/helper.functions.js";
 import ToastMessage from "../components/ToastMessage.js";
+import { API_BASE } from "../constants.js";
 
 const BackgroundContainer = styled(Box)({
   backgroundImage: 'url("https://source.unsplash.com/random/1600x900?workspace")',

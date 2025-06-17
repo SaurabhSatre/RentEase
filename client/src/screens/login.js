@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import ToastMessage from "../components/ToastMessage"; // Assuming you have a ToastMessage component
 import { validateEmail, validatePassword } from "../helper/helper.functions.js";
 import AuthToken from "../helper/AuthToken.js";
+import { API_BASE } from "../constants.js";
 
 const BackgroundContainer = styled(Box)({
   backgroundImage: 'url("https://source.unsplash.com/random/1600x900?technology")',
