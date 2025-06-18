@@ -166,7 +166,7 @@ const ListingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-300">
       <Navbar onLogout={handleLogout} />
 
       <div className="p-6">
@@ -199,7 +199,7 @@ const ListingPage = () => {
                 <img
                   src={`${API_BASE}/api/image/${product.imageID}`}
                   alt={product.title}
-                  className="w-full h-40 object-cover rounded mb-2"
+                  className="w-full h-60 object-cover rounded mb-2"
                 />
 
                 <p className="text-sm text-gray-600">City: {product.city}</p>

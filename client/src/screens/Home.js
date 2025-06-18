@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, Box } from '@mui/material';
 import AuthToken from '../helper/AuthToken.js';
-import InventoryHomePage from './HouseScreens/ListingsPage.js';
+import ListingsPage from './HouseScreens/ListingsPage.js';
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -41,7 +41,7 @@ function Home() {
     );
   }
 
-  return authenticated ? <InventoryHomePage /> : null;
+  return authenticated ? <ListingsPage /> : null;
 }
 
 export default Home;
