@@ -166,14 +166,16 @@ const ListingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-300">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <Navbar onLogout={handleLogout} />
 
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-black">Property Listings</h1>
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 tracking-tight">
+            Find Your Perfect Home
+          </h1>
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105"
             onClick={() => {
               setFormData(initialFormState);
               setImageFile(null);
@@ -186,63 +188,149 @@ const ListingPage = () => {
         </div>
 
         {message && (
-          <div className="mb-4 p-3 bg-yellow-100 text-yellow-700 rounded">
+          <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-600 text-blue-700 rounded shadow-sm">
             {message}
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div key={product._id} className="bg-white p-4 rounded-xl shadow hover:shadow-md transition">
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">Title: {product.title}</h2>
-                <img
-                  src={`${API_BASE}/api/image/${product.imageID}`}
-                  alt={product.title}
-                  className="w-full h-60 object-cover rounded mb-2"
-                />
-
-                <p className="text-sm text-gray-600">City: {product.city}</p>
-                <p className="text-sm text-gray-600">Rent: ₹{product.rent}</p>
-                <p className="text-sm text-gray-600">Type: {product.type}</p>
-                <p className="text-sm text-gray-600">Description: {product.description}</p>
-                {product.email === currentUserEmail && (
-                  <div className="flex justify-end gap-2 mt-4">
-                    <button className="text-green-600 hover:underline" onClick={() => handleInfo(product)}>Get Info</button>
-                    <button className="text-blue-600 hover:underline" onClick={() => handleEdit(product)}>Edit</button>
-                    <button className="text-red-600 hover:underline" onClick={() => handleDelete(product._id)}>Delete</button>
+              <div key={product._id} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                <div className="relative">
+                  <img
+                    src={`${API_BASE}/api/image/${product.imageID}`}
+                    alt={product.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-0 right-0 m-3 px-2 py-1 bg-blue-600 text-white rounded-full text-xs font-medium">
+                    {product.type}
                   </div>
-                )}
+                </div>
+                <div className="p-4">
+                  <h2 className="text-lg font-semibold text-gray-800 mb-2 truncate">{product.title}</h2>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <p className="text-gray-600 text-sm flex items-center">
+                        <svg className="w-3.5 h-3.5 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                        </svg>
+                        {product.city}
+                      </p>
+                      <p className="text-blue-600 font-semibold">
+                        ₹{product.rent.toLocaleString('en-IN')}
+                      </p>
+                    </div>
+                    <p className="text-gray-500 text-sm line-clamp-2">{product.description}</p>
+                  </div>
+                  {product.email === currentUserEmail && (
+                    <div className="flex justify-end gap-3 mt-3 pt-3 border-t border-gray-100">
+                      <button className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors" onClick={() => handleInfo(product)}>Info</button>
+                      <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors" onClick={() => handleEdit(product)}>Edit</button>
+                      <button className="text-red-600 hover:text-red-700 text-sm font-medium transition-colors" onClick={() => handleDelete(product._id)}>Delete</button>
+                    </div>
+                  )}
+                </div>
               </div>
             ))
           ) : (
-            <p className="text-gray-500 col-span-full text-center mt-10">No properties found.</p>
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
+              <svg className="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <p className="text-xl text-gray-500 font-medium">No properties found</p>
+              <p className="text-gray-400 mt-2">Try adjusting your search filters</p>
+            </div>
           )}
         </div>
       </div>
 
       {/* Add Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Add Property</h2>
-            <form className="space-y-4">
-              <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <input name="city" placeholder="City" value={formData.city} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <input name="rent" type="number" placeholder="Rent" value={formData.rent} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <select name="type" value={formData.type} onChange={handleChange} className="w-full border rounded px-4 py-2">
-                <option value="">Select Type</option>
-                {propertyTypes.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <input type="file" accept="image/*" onChange={handleImageChange} className="w-full border px-4 py-2" />
-              {imagePreview && <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover mt-2 rounded-lg" />}
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-2xl w-full max-w-lg shadow-xl">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Property</h2>
+            <form className="space-y-5">
+              <div>
+                <input 
+                  name="title" 
+                  placeholder="Property Title" 
+                  value={formData.title} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <input 
+                  name="city" 
+                  placeholder="City" 
+                  value={formData.city} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <input 
+                  name="rent" 
+                  type="number" 
+                  placeholder="Monthly Rent" 
+                  value={formData.rent} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <select 
+                  name="type" 
+                  value={formData.type} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select Property Type</option>
+                  {propertyTypes.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <textarea 
+                  name="description" 
+                  placeholder="Property Description" 
+                  value={formData.description} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">Property Images</label>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleImageChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3" 
+                />
+                {imagePreview && (
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    className="w-full h-48 object-cover rounded-lg" 
+                  />
+                )}
+              </div>
             </form>
-            <div className="flex justify-end mt-4 space-x-2">
-              <button className="px-4 py-2 border rounded text-gray-600" onClick={() => setShowAddModal(false)}>Cancel</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={handleAddSubmit}>Add</button>
+            <div className="flex justify-end mt-6 gap-3">
+              <button 
+                className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" 
+                onClick={() => setShowAddModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" 
+                onClick={handleAddSubmit}
+              >
+                Add Property
+              </button>
             </div>
           </div>
         </div>
@@ -250,24 +338,74 @@ const ListingPage = () => {
 
       {/* Edit Modal */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Edit Property</h2>
-            <form className="space-y-4">
-              <input name="title" placeholder="Title" value={formData.title} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <input name="city" placeholder="City" value={formData.city} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <input name="rent" type="number" placeholder="Rent" value={formData.rent} onChange={handleChange} className="w-full border rounded px-4 py-2" />
-              <select name="type" value={formData.type} onChange={handleChange} className="w-full border rounded px-4 py-2">
-                <option value="">Select Type</option>
-                {propertyTypes.map((type) => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="w-full border rounded px-4 py-2" />
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-2xl w-full max-w-lg shadow-xl">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Property</h2>
+            <form className="space-y-5">
+              <div>
+                <input 
+                  name="title" 
+                  placeholder="Property Title" 
+                  value={formData.title} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <input 
+                  name="city" 
+                  placeholder="City" 
+                  value={formData.city} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <input 
+                  name="rent" 
+                  type="number" 
+                  placeholder="Monthly Rent" 
+                  value={formData.rent} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                />
+              </div>
+              <div>
+                <select 
+                  name="type" 
+                  value={formData.type} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Select Property Type</option>
+                  {propertyTypes.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <textarea 
+                  name="description" 
+                  placeholder="Property Description" 
+                  value={formData.description} 
+                  onChange={handleChange} 
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32" 
+                />
+              </div>
             </form>
-            <div className="flex justify-end mt-4 space-x-2">
-              <button className="px-4 py-2 border rounded text-gray-600" onClick={() => setShowEditModal(false)}>Cancel</button>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={handleEditSubmit}>Update</button>
+            <div className="flex justify-end mt-6 gap-3">
+              <button 
+                className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors" 
+                onClick={() => setShowEditModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" 
+                onClick={handleEditSubmit}
+              >
+                Update Property
+              </button>
             </div>
           </div>
         </div>
@@ -275,39 +413,63 @@ const ListingPage = () => {
 
       {/* Info Modal */}
       {showInfoModal && selectedInfoProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4">Property Information</h2>
-            <div className="space-y-2 text-gray-800">
-              <p><strong>Title:</strong> {selectedInfoProduct.title}</p>
-              <p><strong>City:</strong> {selectedInfoProduct.city}</p>
-              <p><strong>Rent:</strong> ₹{selectedInfoProduct.rent}</p>
-              <p><strong>Type:</strong> {selectedInfoProduct.type}</p>
-              <p><strong>Description:</strong> {selectedInfoProduct.description}</p>
-              <p><strong>Email:</strong> {selectedInfoProduct.email}</p>
-              <p><strong>Created At:</strong> {new Date(selectedInfoProduct.createdAt).toLocaleString('en-IN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-              })}</p>
-
-              <p><strong>Last Updated:</strong> {new Date(selectedInfoProduct.updatedAt).toLocaleString('en-IN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-              })}</p>
-
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-2xl w-full max-w-lg shadow-xl">
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Property Details</h2>
+            <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="col-span-1 font-medium text-gray-500">Title</div>
+                <div className="col-span-2 text-gray-900">{selectedInfoProduct.title}</div>
+                
+                <div className="col-span-1 font-medium text-gray-500">City</div>
+                <div className="col-span-2 text-gray-900">{selectedInfoProduct.city}</div>
+                
+                <div className="col-span-1 font-medium text-gray-500">Monthly Rent</div>
+                <div className="col-span-2 text-gray-900">₹{selectedInfoProduct.rent.toLocaleString('en-IN')}</div>
+                
+                <div className="col-span-1 font-medium text-gray-500">Type</div>
+                <div className="col-span-2 text-gray-900">{selectedInfoProduct.type}</div>
+                
+                <div className="col-span-1 font-medium text-gray-500">Contact Email</div>
+                <div className="col-span-2 text-gray-900">{selectedInfoProduct.email}</div>
+                
+                <div className="col-span-1 font-medium text-gray-500">Listed On</div>
+                <div className="col-span-2 text-gray-900">
+                  {new Date(selectedInfoProduct.createdAt).toLocaleString('en-IN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                  })}
+                </div>
+                
+                <div className="col-span-1 font-medium text-gray-500">Last Updated</div>
+                <div className="col-span-2 text-gray-900">
+                  {new Date(selectedInfoProduct.updatedAt).toLocaleString('en-IN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                  })}
+                </div>
+              </div>
+              
+              <div className="pt-4">
+                <div className="font-medium text-gray-500 mb-2">Description</div>
+                <p className="text-gray-900">{selectedInfoProduct.description}</p>
+              </div>
             </div>
-            <div className="flex justify-end mt-4">
-              <button className="px-4 py-2 border rounded text-gray-600" onClick={() => setShowInfoModal(false)}>Close</button>
+            <div className="flex justify-end mt-6">
+              <button 
+                className="px-6 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={() => setShowInfoModal(false)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
