@@ -287,10 +287,19 @@ const ListingPage = () => {
                         {product.email}
                       </Typography>
                       <Chip
-                        label={getDaysAgo(product.createdAt)}
-                        size="small"
-                        sx={{ bgcolor: 'info.light', color: 'primary.dark', fontWeight: 600, ml: 'auto' }}
-                      />
+  label={getDaysAgo(product.createdAt)}
+  size="small"
+  sx={{
+    bgcolor: 'info.light',
+    color: 'primary.dark',
+    fontWeight: 600,
+    ml: 'auto',
+    pointerEvents: 'none' // disables click interaction
+  }}
+/>
+
+
+
                     </Box>
                     {product.email === currentUserEmail && (
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1.5, mt: 2 }}>
