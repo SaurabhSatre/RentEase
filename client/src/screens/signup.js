@@ -4,66 +4,55 @@ import {
   Button,
   TextField,
   Typography,
-  Container,
-  Grid,
   Paper,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
+  IconButton,
+  InputAdornment,
+  Grid,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { validateEmail, validatePassword } from "../helper/helper.functions.js";
 import ToastMessage from "../components/ToastMessage.js";
 import { API_BASE } from "../constants.js";
-
-const BackgroundContainer = styled(Box)({
-  backgroundImage: 'url("https://source.unsplash.com/random/1600x900?workspace")',
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  height: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
-
-const SignUpPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
-  width: "100%",
-  maxWidth: 500,
-  borderRadius: 16,
-  boxShadow: "0 8px 20px rgba(0, 0, 0, 0.2)",
-  backgroundColor: "rgba(255, 255, 255, 0.85)",
-  backdropFilter: "blur(10px)",
-}));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5),
   fontSize: "1rem",
   borderRadius: theme.shape.borderRadius * 2,
   textTransform: "none",
+  fontWeight: 700,
+  boxShadow: theme.shadows[2],
 }));
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      const name = data.get("name");
-      const email = data.get("email");
+      setLoading(true);
+      const { name, email, password, confirmPassword } = form;
 
       if (password !== confirmPassword) {
         setToastMessage("Passwords do not match");
         setSeverity("error");
         setShowToast(true);
+        setLoading(false);
         return;
       }
 
@@ -71,6 +60,7 @@ const SignUpPage = () => {
         setToastMessage("Email is not valid!");
         setSeverity("error");
         setShowToast(true);
+        setLoading(false);
         return;
       }
 
@@ -78,29 +68,17 @@ const SignUpPage = () => {
         setToastMessage("Password is not valid!");
         setSeverity("error");
         setShowToast(true);
+        setLoading(false);
         return;
       }
 
-      const userData = {
-        name,
-        email,
-        password
-      };
-
-      //console.log("This is user URL : " , `${process.env.REACT_APP_BACKENDURL}/api/v1/user/signup`);
-
-      const res = await fetch(`https://renteasebackend.saurabhsatre.info/api/auth/user/register`, {
+      const userData = { name, email, password };
+      const res = await fetch(`${API_BASE}/api/auth/user/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       });
-
       const response = await res.json();
-
-      //console.log("This is response from server : " , response);
-
       if (response.success) {
         setToastMessage('Sign up successful!');
         setSeverity('success');
@@ -111,8 +89,9 @@ const SignUpPage = () => {
         setSeverity('error');
         setShowToast(true);
       }
+      setLoading(false);
     } catch (error) {
-      console.error('Error:', error);
+      setLoading(false);
       setToastMessage("Something went wrong");
       setSeverity("error");
       setShowToast(true);
@@ -120,24 +99,50 @@ const SignUpPage = () => {
   };
 
   return (
-    <BackgroundContainer>
-      <SignUpPaper>
-        <Typography
-          variant="h4"
-          component="h1"
-          gutterBottom
-          align="center"
-          sx={{ fontWeight: 600, color: "primary.main" }}
-        >
-          Create an Account
-        </Typography>
-        <Typography
-          variant="body1"
-          align="center"
-          sx={{ mb: 2, color: "text.secondary" }}
-        >
-          Sign up to get started
-        </Typography>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundImage: 'url(https://source.unsplash.com/random/1600x900?apartment,city,home)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <Paper
+        elevation={12}
+        sx={{
+          p: 4,
+          width: '100%',
+          maxWidth: 440,
+          borderRadius: 6,
+          bgcolor: 'rgba(255,255,255,0.80)',
+          boxShadow: '0 8px 32px 0 rgba(0,150,136,0.15)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255,255,255,0.25)',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
+          <PersonAddAlt1Icon sx={{ fontSize: 48, color: 'primary.main', mb: 1 }} />
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            align="center"
+            sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: '-1px' }}
+          >
+            Create an Account
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ mb: 2, color: 'text.secondary' }}
+          >
+            Sign up to get started
+          </Typography>
+        </Box>
         <Box
           component="form"
           onSubmit={handleSubmit}
@@ -151,6 +156,9 @@ const SignUpPage = () => {
             variant="outlined"
             fullWidth
             required
+            value={form.name}
+            onChange={handleChange}
+            autoComplete="name"
           />
           <TextField
             label="Email Address"
@@ -159,56 +167,79 @@ const SignUpPage = () => {
             variant="outlined"
             fullWidth
             required
+            value={form.email}
+            onChange={handleChange}
+            autoComplete="username"
           />
           <TextField
             label="Password"
             name="password"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={form.password}
+            onChange={handleChange}
+            autoComplete="new-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((show) => !show)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <TextField
             label="Confirm Password"
             name="confirmPassword"
-            type="password"
+            type={showConfirmPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={form.confirmPassword}
+            onChange={handleChange}
+            autoComplete="new-password"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle confirm password visibility"
+                    onClick={() => setShowConfirmPassword((show) => !show)}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          
-          <StyledButton type="submit" variant="contained" color="primary" fullWidth>
-            Sign Up
+          <StyledButton type="submit" variant="contained" color="primary" fullWidth disabled={loading} sx={{ mt: 1, mb: 1 }}>
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
           </StyledButton>
         </Box>
         <Grid container justifyContent="center" sx={{ mt: 2 }}>
-          <Typography variant="body2">
-            Already have an account?{" "}
-            <span
-              style={{
-                color: "#3f51b5",
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </span>
-          </Typography>
+          <Button
+            variant="text"
+            sx={{ color: 'secondary.main', textTransform: 'none', fontWeight: 600 }}
+            onClick={() => navigate("/login")}
+          >
+            Back to Login
+          </Button>
         </Grid>
-      </SignUpPaper>
-
+      </Paper>
       <ToastMessage
         message={toastMessage}
         show={showToast}
         onClose={() => setShowToast(false)}
         severity={severity}
       />
-    </BackgroundContainer>
+    </Box>
   );
 };
 

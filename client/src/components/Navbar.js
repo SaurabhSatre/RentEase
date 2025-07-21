@@ -1,10 +1,27 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFilters } from '../slices/searchSlice';
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  Button,
+  InputLabel,
+  FormControl,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
 
 const Navbar = ({ onLogout, onSearch }) => {
   const filters = useSelector((state) => state.filters);
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleChange = (e) => {
     dispatch(setFilters({
@@ -20,67 +37,75 @@ const Navbar = ({ onLogout, onSearch }) => {
   };
 
   return (
-    <nav className="bg-white shadow-md border-b-2 border-gray-200">
-      <div className="max-w-screen-xl mx-auto px-4 py-4 flex flex-wrap items-start justify-between gap-4">
-        <div className="text-4xl vs:text-3xl font-extrabold text-indigo-600 tracking-wide">
-          RentEase
-        </div>
-
-
-        {/* Container for filters + buttons */}
-        <div className="flex flex-wrap items-center gap-2 ml-auto vs:flex-col vs:items-start vs:w-full">
-          <input
-            type="text"
+    <AppBar position="static" color="inherit" elevation={2} sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: 'background.paper' }}>
+      <Toolbar sx={{ flexWrap: 'wrap', gap: 2, py: isMobile ? 2 : 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 4 }}>
+          <HomeWorkIcon sx={{ fontSize: 36, color: 'primary.main', mr: 1 }} />
+          <Typography variant="h5" fontWeight={800} color="primary.main" letterSpacing={-1}>
+            RentEase
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 2, ml: 'auto', width: isMobile ? '100%' : 'auto' }}>
+          <TextField
+            size="small"
             name="city"
-            placeholder="City"
+            label="City"
             value={filters.city}
             onChange={handleChange}
-            className="w-28 border rounded px-2 py-1 vs:w-full"
+            sx={{ minWidth: 100, bgcolor: 'background.default', borderRadius: 1 }}
           />
-          <input
-            type="number"
+          <TextField
+            size="small"
             name="rentMin"
-            placeholder="Min Rent"
+            label="Min Rent"
+            type="number"
             value={filters.rentMin}
             onChange={handleChange}
-            className="w-28 border rounded px-2 py-1 vs:w-full"
+            sx={{ minWidth: 100, bgcolor: 'background.default', borderRadius: 1 }}
           />
-          <input
-            type="number"
+          <TextField
+            size="small"
             name="rentMax"
-            placeholder="Max Rent"
+            label="Max Rent"
+            type="number"
             value={filters.rentMax}
             onChange={handleChange}
-            className="w-28 border rounded px-2 py-1 vs:w-full"
+            sx={{ minWidth: 100, bgcolor: 'background.default', borderRadius: 1 }}
           />
-          <select
-            name="type"
-            value={filters.type}
-            onChange={handleChange}
-            className="w-26 border rounded px-2 py-1 vs:w-full"
-          >
-            <option value="">All Types</option>
-            <option value="1BHK">1BHK</option>
-            <option value="2BHK">2BHK</option>
-            <option value="3BHK">3BHK</option>
-          </select>
-
-          <button
+          <FormControl size="small" sx={{ minWidth: 110, bgcolor: 'background.default', borderRadius: 1 }}>
+            <InputLabel>Type</InputLabel>
+            <Select
+              name="type"
+              value={filters.type}
+              label="Type"
+              onChange={handleChange}
+            >
+              <MenuItem value="">All Types</MenuItem>
+              <MenuItem value="1BHK">1BHK</MenuItem>
+              <MenuItem value="2BHK">2BHK</MenuItem>
+              <MenuItem value="3BHK">3BHK</MenuItem>
+              <MenuItem value="Studio">Studio</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleSearch}
-            className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 vs:w-full"
+            sx={{ borderRadius: 1, fontWeight: 700, boxShadow: 1 }}
           >
             Search
-          </button>
-
-          <button
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
             onClick={onLogout}
-            className="text-indigo-600 border border-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-600 hover:text-white transition vs:w-full"
+            sx={{ borderRadius: 1, fontWeight: 700, ml: isMobile ? 0 : 2, boxShadow: 1 }}
           >
             Logout
-          </button>
-        </div>
-      </div>
-    </nav>
+          </Button>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

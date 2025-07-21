@@ -18,7 +18,7 @@ const ToastMessage = ({ message, show, onClose, severity }) => {
       onClose={onClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >
-      <Alert onClose={onClose} severity={severity} sx={{ width: '100%' }}>
+      <Alert onClose={onClose} severity={severity} sx={{ width: '100%', borderRadius: 1, fontWeight: 600 }}>
         {message}
       </Alert>
     </Snackbar>
